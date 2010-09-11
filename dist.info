@@ -1,0 +1,14 @@
+type = [[all]]
+arch = [[Universal]]
+short = [['bit.numberlua' Bitwise operators in pure Lua using Lua numbers]]
+author = [[David Manura]]
+full = [[Note: use a C binding instead for higher performance.]]
+maintainer = [[David Manura <http://lua-users.org/wiki/DavidManura>]]
+version = [[0.1]]
+homepage = [[http://lua-users.org/wiki/ModuleBitNumberLua]]
+license = [[MIT]]
+name = [[bit.numberlua]]
+dependencies = {
+	['lua'] = [[>=5.1]],
+}
+

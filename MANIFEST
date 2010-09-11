@@ -1,0 +1,6 @@
+COPYRIGHT
+MANIFEST
+bit.numberlua-0.1.0-1.rockspec
+dist.info
+util.mk
+module/lmod/bit/numberlua.lua
