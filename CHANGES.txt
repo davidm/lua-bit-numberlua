@@ -1,0 +1,7 @@
+2011-11-26
+  Add functions: tobit, tohex, rshift, lshift, extract, replace, bswap, rrotate, lrotate, rol, ror
+  Add test suite.
+
+2011-09-11 - initial import
+
+2008 - intial version

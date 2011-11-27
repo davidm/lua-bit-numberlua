@@ -1,5 +1,5 @@
 package = "bit.numberlua"
-version = "0.1.0-1"
+version = "0.1.0-1" --FIX
 source = {
    url = "http://math2.org/download/lua-bit-numberlua-0.1.tar.gz",
 }

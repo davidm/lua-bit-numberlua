@@ -1,6 +1,9 @@
 COPYRIGHT
+CHANGES.txt
+README.txt
 MANIFEST
-bit.numberlua-0.1.0-1.rockspec
+bit.numberlua.rockspec
 dist.info
+test.lua
 util.mk
 module/lmod/bit/numberlua.lua
