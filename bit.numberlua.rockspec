@@ -1,7 +1,7 @@
 package = "bit.numberlua"
-version = "0.1.0-1" --FIX
+version = "$(_VERSION)"
 source = {
-   url = "http://math2.org/download/lua-bit-numberlua-0.1.tar.gz",
+   url = "http://math2.org/download/lua-bit-numberlua-FIX.tar.gz",
 }
 description = {
    summary    = "'bit.numberlua' Bitwise operators in pure Lua using Lua numbers",
