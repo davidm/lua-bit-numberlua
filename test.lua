@@ -1,6 +1,6 @@
 -- tests of bit.numberlua'
 
-package.path = 'module/lmod/?.lua;' .. package.path
+package.path = 'lmod/?.lua;' .. package.path
 local bit = require 'bit.numberlua'
 
 local function mystr(o)

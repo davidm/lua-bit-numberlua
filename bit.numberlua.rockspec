@@ -18,7 +18,7 @@ build = {
   type = "none",
   install = {
      lua = {
-        ["bit.numberlua"] = "module/lmod/bit/numberlua.lua",
+        ["bit.numberlua"] = "lmod/bit/numberlua.lua",
      }
   }
 }

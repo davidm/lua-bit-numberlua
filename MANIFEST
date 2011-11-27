@@ -6,4 +6,4 @@ bit.numberlua.rockspec
 dist.info
 test.lua
 util.mk
-module/lmod/bit/numberlua.lua
+lmod/bit/numberlua.lua
