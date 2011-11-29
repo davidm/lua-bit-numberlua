@@ -1,7 +1,7 @@
 package = "bit.numberlua"
 version = "$(_VERSION)"
 source = {
-   url = "http://math2.org/download/lua-bit-numberlua-FIX.tar.gz",
+   url = "https://github.com/davidm/lua-bit-numberlua/zipball/v$(_VERSION)",
 }
 description = {
    summary    = "'bit.numberlua' Bitwise operators in pure Lua using Lua numbers",
@@ -9,7 +9,7 @@ description = {
       Note: use a C binding instead for higher performance.
    ]],
    license    =  "MIT/X11",
-   homepage   = "http://lua-users.org/wiki/ModuleBitNumberLua",
+   homepage   = "https://github.com/davidm/lua-bit-numberlua",
    maintainer = "David Manura <http://lua-users.org/wiki/DavidManura>",
 }
 dependencies = {
@@ -22,4 +22,3 @@ build = {
      }
   }
 }
-
