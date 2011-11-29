@@ -1,10 +1,12 @@
-package = "bit.numberlua"
+package = "lua-bit-numberlua"
 version = "$(_VERSION)"
 source = {
-   url = "https://github.com/davidm/lua-bit-numberlua/zipball/v$(_VERSION)",
+   --url = "https://github.com/davidm/lua-bit-numberlua/zipball/v$(_VERSION)",
+   url = "git://github.com/davidm/lua-bit-numberlua.git",
+   tag='v$(_VERSION)'
 }
 description = {
-   summary    = "'bit.numberlua' Bitwise operators in pure Lua using Lua numbers",
+   summary    = "Bitwise operators in pure Lua using Lua numbers",
    detailed   = [[
       Note: use a C binding instead for higher performance.
    ]],
