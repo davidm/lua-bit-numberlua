@@ -1,29 +1,142 @@
 --[[
-bit.numberlua
 
-Bitwise operations implemented entirely in Lua.
-Represents bit arrays as non-negative Lua numbers.[1]
-Can represent 32-bit bit arrays, when Lua is compiled
-with lua_Number being double-precision IEEE 754 floating point.
+LUA MODULE
 
-Based partly on Roberto Ierusalimschy's post
-in http://lua-users.org/lists/lua-l/2002-09/msg00134.html .
+  bit.numberlua - Bitwise operations implemented in pure Lua as numbers.
 
-WARNING: Not all corner cases have been tested and documented.
-Some attempt was made to make these similar to the Lua 5.2 [2]
-and LuaJit BitOp [3] libraries, but this is not fully tested and there
-are currently some differences.  Addressing these differences may
-be improved in the future.
+DESCRIPTION
+  
+  This library implements bitwise operations entirely in Lua.
+  This module is typically intended if for some reasons you don't want
+  to or cannot  install a popular C based bit library like BitOp 'bit' [1]
+  (which comes pre-installed with LuaJIT) or 'bit32' (which comes
+  pre-installed with Lua 5.2) but want a similar interface.
+  
+  This modules represents bit arrays as non-negative Lua numbers. [1]
+  It can represent 32-bit bit arrays when Lua is compiled
+  with lua_Number as double-precision IEEE 754 floating point.
 
-References
-[1] http://lua-users.org/wiki/FloatingPoint
-[2] http://www.lua.org/manual/5.2/
-[3] http://bitop.luajit.org/
+  The module is nearly the most efficient it can be but may be a few times
+  slower than the C based bit libraries and is orders or magnitude
+  slower than LuaJIT bit operations, which compile to native code.  Therefore,
+  this library is inferior in performane to the other modules.
 
-(c) 2008-2011 David Manura.  Licensed under the same terms as Lua (MIT).
+  The `xor` function in this module is based partly on Roberto Ierusalimschy's
+  post in http://lua-users.org/lists/lua-l/2002-09/msg00134.html .
+  
+STATUS
+
+  WARNING: Not all corner cases have been tested and documented.
+  Some attempt was made to make these similar to the Lua 5.2 [2]
+  and LuaJit BitOp [3] libraries, but this is not fully tested and there
+  are currently some differences.  Addressing these differences may
+  be improved in the future but it is not yet fully determined how to
+  resolve these differences.
+
+API
+
+  BIT.tobit(x) --> z
+  
+    Similar to function in BitOp.
+    
+  BIT.tohex(x, n)
+  
+    Similar to function in BitOp.
+  
+  BIT.band(x, y) --> z
+  
+    Similar to function in Lua 5.2 and BitOp but required two arguments.
+  
+  BIT.bor(x, y) --> z
+  
+    Similar to function in Lua 5.2 and BitOp but required two arguments.
+
+  BIT.bxor(x, y) --> z
+  
+    Similar to function in Lua 5.2 and BitOp but required two arguments.
+  
+  BIT.bnot(x) --> z
+  
+    Similar to function in Lua 5.2 and BitOp.
+
+  BIT.lshift(x, disp) --> z
+  
+    Similar to function in Lua 5.2 (warning: BitOp uses unsigned lower 5 bits of shift),
+  
+  BIT.rshift(x, disp) --> z
+  
+    Similar to function in Lua 5.2 (warning: BitOp uses unsigned lower 5 bits of shift),
+
+  BIT.extract(x, field [, width]) --> z
+  
+    Similar to function in Lua 5.2.
+  
+  BIT.replace(x, v, field, width) --> z
+  
+    Similar to function in Lua 5.2.
+  
+  BIT.bswap(x) --> z
+  
+    Similar to function in Lua 5.2.
+
+  BIT.rrotate(x, disp) --> z
+  BIT.ror(x, disp) --> z
+  
+    Similar to function in Lua 5.2 and BitOp.
+
+  BIT.lrotate(x, disp) --> z
+  BIT.rol(x, disp) --> z
+
+    Similar to function in Lua 5.2 and BitOp.
+  
+  BIT.arshift
+  
+    NOT IMPLEMENTED yet.  Similar to function in Lua 5.2 and BitOp.
+    
+  BIT.btest
+  
+    NOT IMPLEMENTED yet.  Similar to function in Lua 5.2.
+
+DEPENDENCIES
+
+  None (other than Lua 5.1 or 5.2).
+    
+INSTALLATION
+
+  Copy the `bit` directory into your LUA_PATH.
+
+REFERENCES
+
+  [1] http://lua-users.org/wiki/FloatingPoint
+  [2] http://www.lua.org/manual/5.2/
+  [3] http://bitop.luajit.org/
+  
+LICENSE
+
+  (c) 2008-2011 David Manura.  Licensed under the same terms as Lua (MIT).
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+  (end license)
+
 --]]
 
-local M = {_TYPE='module', _NAME='bit.numberlua', _VERSION='000.003.2011-11-26'}
+local M = {_TYPE='module', _NAME='bit.numberlua', _VERSION='000.003.2011-11-28'}
 
 local floor = math.floor
 
@@ -148,29 +261,3 @@ M.rol = M.lrotate  -- LuaOp style
 M.ror = M.rrotate  -- LuaOp style
 
 return M
-
---[[
-LICENSE
-
-Copyright (C) 2008-2011, David Manura.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-(end license)
---]]
