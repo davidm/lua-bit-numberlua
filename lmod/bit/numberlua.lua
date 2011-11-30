@@ -2,7 +2,8 @@
 
 LUA MODULE
 
-  bit.numberlua - Bitwise operations implemented in pure Lua as numbers.
+  bit.numberlua - Bitwise operations implemented in pure Lua as numbers,
+    with Lua 5.2 'bit32' and (LuaJIT) LuaBitOp 'bit' compatibility interfaces.
 
 SYNOPSIS
 
@@ -12,6 +13,10 @@ SYNOPSIS
   -- Interface providing strong Lua 5.2 'bit32' compatibility
   local bit32 = require 'bit.numberlua'.bit32
   assert(bit32.band(-1) == 0xffffffff)
+  
+  -- Interface providing strong (LuaJIT) LuaBitOp 'bit' compatibility
+  local bit = require 'bit.numberlua'.bit
+  assert(bit.tobit(0xffffffff) == -1)
   
 DESCRIPTION
   
@@ -33,10 +38,11 @@ DESCRIPTION
   The `xor` function in this module is based partly on Roberto Ierusalimschy's
   post in http://lua-users.org/lists/lua-l/2002-09/msg00134.html .
   
-  The included BIT.bit32 sublibrary aims to provide 100% compatibility with
-  the Lua 5.2 "bit32" library.  This compatbility is at the cost of some
-  efficiency since inputted numbers are normalized and more general
-  forms (e.g. multi-argument bitwise operators) are supported.
+  The included BIT.bit32 and BIT.bit sublibraries aims to provide 100%
+  compatibility with the Lua 5.2 "bit32" and (LuaJIT) LuaBitOp "bit" library.
+  This compatbility is at the cost of some efficiency since inputted
+  numbers are normalized and more general forms (e.g. multi-argument
+  bitwise operators) are supported.
   
 STATUS
 
@@ -48,7 +54,9 @@ STATUS
   resolve these differences.
   
   The BIT.bit32 library passes the Lua 5.2 test suite (bitwise.lua)
-  http://www.lua.org/tests/5.2/ .
+  http://www.lua.org/tests/5.2/ .  The BIT.bit library passes the LuaBitOp
+  test suite (bittest.lua).  However, these have not been tested on
+  platforms with Lua compiled with 32-bit integer numbers.
 
 API
 
@@ -131,6 +139,24 @@ API
     bit32.lshift (x, disp) --> z
     bit32.rrotate (x, disp) --> z
     bit32.rshift (x, disp) --> z
+
+  BIT.bit
+  
+    This table contains functions that aim to provide 100% compatibility
+    with the LuaBitOp "bit" library (from LuaJIT).
+    
+    bit.tobit(x) --> y
+    bit.tohex(x [,n]) --> y
+    bit.bnot(x) --> y
+    bit.bor(x1 [,x2...]) --> y
+    bit.band(x1 [,x2...]) --> y
+    bit.bxor(x1 [,x2...]) --> y
+    bit.lshift(x, n) --> y
+    bit.rshift(x, n) --> y
+    bit.arshift(x, n) --> y
+    bit.rol(x, n) --> y
+    bit.ror(x, n) --> y
+    bit.bswap(x) --> y
     
 DEPENDENCIES
 
@@ -248,13 +274,15 @@ lshift = M.lshift
 function M.tohex(x, n) -- BitOp style
   n = n or 8
   local up
-  if n < 0 then
+  if n <= 0 then
+    if n == 0 then return '' end
     up = true
     n = - n
   end
   x = band(x, 16^n-1)
   return ('%0'..n..(up and 'X' or 'x')):format(x)
 end
+local tohex = M.tohex
 
 function M.extract(n, field, width) -- Lua5.2 inspired
   width = width or 1
@@ -278,6 +306,7 @@ function M.bswap(x)  -- BitOp style
   local d = band(x, 0xff)
   return lshift(lshift(lshift(a, 8) + b, 8) + c, 8) + d
 end
+local bswap = M.bswap
 
 function M.rrotate(x, disp)  -- Lua5.2 inspired
   disp = disp % 32
@@ -300,6 +329,7 @@ function M.arshift(x, disp) -- Lua5.2 inspired
   if x >= 0x80000000 then z = z + lshift(2^disp-1, 32-disp) end
   return z
 end
+local arshift = M.arshift
 
 function M.btest(x, y) -- Lua5.2 inspired
   return band(x, y) ~= 0
@@ -424,8 +454,82 @@ function M.bit32.replace(x, v, field, ...)
 end
 
 
--- TODO? Likewise add  LuaOp "bit" compat section?
--- M.bit32 = {} -- LuaOp "bit" compatibility
+--
+-- Start LuaBitOp "bit" compat section.
+--
 
+ M.bit = {} -- LuaBitOp "bit" compatibility
+
+ function M.bit.tobit(x)
+  x = x % MOD
+  if x >= 0x80000000 then x = x - MOD end
+  return x
+end
+local bit_tobit = M.bit.tobit
+
+function M.bit.tohex(x, ...)
+  return tohex(x % MOD, ...)
+end
+
+function M.bit.bnot(x)
+  return bit_tobit(bnot(x % MOD))
+end
+
+local function bit_bor(a, b, c, ...)
+  if c then
+    return bit_bor(bit_bor(a, b), c, ...)
+  elseif b then
+    return bit_tobit(bor(a % MOD, b % MOD))
+  else
+    return bit_tobit(a)
+  end
+end
+M.bit.bor = bit_bor
+
+local function bit_band(a, b, c, ...)
+  if c then
+    return bit_band(bit_band(a, b), c, ...)
+  elseif b then
+    return bit_tobit(band(a % MOD, b % MOD))
+  else
+    return bit_tobit(a)
+  end
+end
+M.bit.band = bit_band
+
+local function bit_bxor(a, b, c, ...)
+  if c then
+    return bit_bxor(bit_bxor(a, b), c, ...)
+  elseif b then
+    return bit_tobit(bxor(a % MOD, b % MOD))
+  else
+    return bit_tobit(a)
+  end
+end
+M.bit.bxor = bit_bxor
+
+function M.bit.lshift(x, n)
+  return bit_tobit(lshift(x % MOD, n % 32))
+end
+
+function M.bit.rshift(x, n)
+  return bit_tobit(rshift(x % MOD, n % 32))
+end
+
+function M.bit.arshift(x, n)
+  return bit_tobit(arshift(x % MOD, n % 32))
+end
+
+function M.bit.rol(x, n)
+  return bit_tobit(lrotate(x % MOD, n % 32))
+end
+
+function M.bit.ror(x, n)
+  return bit_tobit(rrotate(x % MOD, n % 32))
+end
+
+function M.bit.bswap(x)
+  return bit_tobit(bswap(x % MOD))
+end
 
 return M

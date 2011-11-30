@@ -96,11 +96,23 @@ checkeq(bit.arshift(0x7fffffff, 4), 0x07ffffff)
 checkeq(bit.arshift(0x7fffffff, 31), 0)
 checkeq(bit.arshift(0x7fffffff, 32), 0)
 
--- Note: optionally run bitwise.lua from Lua test suite.
+-- BIT.bit32.
+-- Optionally run bitwise.lua from Lua test suite.
 -- http://www.lua.org/tests/5.2/
 if TEST_BIT32 then
-  bit32 = require 'bit.numberlua' . bit32
-  dofile 'bitwise.lua'
+  _G.bit32 = require 'bit.numberlua' . bit32
+  dofile 'contrib/bitwise.lua'
 end
+
+-- BIT.bit
+-- Optionally run bittest.lua (included) from LuaBitOp test suite.
+-- http://bitop.luajit.org/
+--if TEST_BIT then
+  package.loaded.bit = bit.bit
+  dofile 'contrib/bittest.lua'
+--end
+
+-- BIT.bit.
+
 
 print 'DONE'

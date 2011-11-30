@@ -1,7 +1,8 @@
 2011-11-29
-  Add functions: tobit, tohex, rshift, lshift, arshift, extract, replace, bswap, rrotate, lrotate, rol, ror, btest
-  Add  BIT.bit32 Lua 5.2 compatibility submodule.
-  Add test suite.
+  Added functions: tobit, tohex, rshift, lshift, arshift, extract, replace, bswap, rrotate, lrotate, rol, ror, btest
+  Added BIT.bit32 Lua 5.2 compatibility submodule.
+  Added BIT.bit LuaBitOp compatibility submodule.
+  Added test suite.
 
 2011-09-11 - initial import
 
