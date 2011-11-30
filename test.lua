@@ -42,6 +42,11 @@ checkeq(bit.band(0xffffffff,0), 0)
 checkeq(bit.band(0xa207f158,0x2e1054c9), 0x22005048)
 -- note: multiple args not currently supported
 
+-- bit.btest
+checkeq(bit.btest(0,0), false)
+checkeq(bit.btest(0xf000,0xf000), true)
+checkeq(bit.btest(0xffffffff,0), false)
+
 --- bit.bor
 checkeq(bit.bor(0,0), 0)
 checkeq(bit.bor(0xffffffff,0xffffffff), 0xffffffff)
@@ -82,9 +87,20 @@ checkeq(bit.ror, bit.rrotate)
 checkeq(bit.bswap(0x12345678), 0x78563412)
 checkeq(bit.bswap(0x78563412), 0x12345678)
 
---TODO
 -- bit.arshift
--- bit.btest
+checkeq(bit.arshift(0, 0), 0)
+checkeq(bit.arshift(0xffffffff, 0), 0xffffffff)
+checkeq(bit.arshift(0xffffffff, 4), 0xffffffff)
+checkeq(bit.arshift(0xffffffff, 32), 0xffffffff)
+checkeq(bit.arshift(0x7fffffff, 4), 0x07ffffff)
+checkeq(bit.arshift(0x7fffffff, 31), 0)
+checkeq(bit.arshift(0x7fffffff, 32), 0)
 
+-- Note: optionally run bitwise.lua from Lua test suite.
+-- http://www.lua.org/tests/5.2/
+if TEST_BIT32 then
+  bit32 = require 'bit.numberlua' . bit32
+  dofile 'bitwise.lua'
+end
 
 print 'DONE'
