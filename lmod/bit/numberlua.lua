@@ -136,7 +136,7 @@ LICENSE
 
 --]]
 
-local M = {_TYPE='module', _NAME='bit.numberlua', _VERSION='000.003.2011-11-28'}
+local M = {_TYPE='module', _NAME='bit.numberlua', _VERSION='000.003.2011-11-29'}
 
 local floor = math.floor
 
@@ -177,39 +177,37 @@ local function make_bitop(t)
 end
 
 -- ok?  probably not if running on a 32-bit int Lua number type platform
-local function tobit(x)
+function M.tobit(x)
   return x % 2^32
 end
-M.tobit = tobit
 
-local bxor = make_bitop {[0]={[0]=0,[1]=1},[1]={[0]=1,[1]=0}, n=4}
-M.bxor = bxor
+M.bxor = make_bitop {[0]={[0]=0,[1]=1},[1]={[0]=1,[1]=0}, n=4}
+local bxor = M.bxor
 
 local F8 = 2^32 - 1
-local function bnot(a)   return F8 - a end
-M.bnot = bnot
+function M.bnot(a)   return F8 - a end
+local bnot = M.bnot
 
-local function band(a,b) return ((a+b) - bxor(a,b))/2 end
-M.band = band
+function M.band(a,b) return ((a+b) - bxor(a,b))/2 end
+local band = M.band
 
-local function bor(a,b)  return F8 - band(F8 - a, F8 - b) end
-M.bor = bor
+function M.bor(a,b)  return F8 - band(F8 - a, F8 - b) end
 
 local lshift, rshift -- forward declare
 
-function rshift(a,disp) -- Lua5.2 style
+function M.rshift(a,disp) -- Lua5.2 style
   if disp < 0 then return lshift(a,-disp) end
   return floor(a % 2^32 / 2^disp)
 end
-M.rshift = rshift
+rshift = M.rshift
 
-function lshift(a,disp) -- Lua5.2 style
+function M.lshift(a,disp) -- Lua5.2 style
   if disp < 0 then return rshift(a,-disp) end 
   return (a * 2^disp) % 2^32
 end
-M.lshift = lshift
+lshift = M.lshift
 
-local function tohex(x, n) -- BitOp style
+function M.tohex(x, n) -- BitOp style
   n = n or 8
   local up
   if n < 0 then
@@ -219,43 +217,38 @@ local function tohex(x, n) -- BitOp style
   x = band(x, 16^n-1)
   return ('%0'..n..(up and 'X' or 'x')):format(x)
 end
-M.tohex = tohex
 
-local function extract(n, field, width) -- Lua5.2 style
+function M.extract(n, field, width) -- Lua5.2 style
   width = width or 1
   return band(rshift(n, field), 2^width-1)
 end
-M.extract = extract
 
-local function replace(n, v, field, width) -- Lua5.2 style
+function M.replace(n, v, field, width) -- Lua5.2 style
   width = width or 1
   local mask1 = 2^width-1
   v = band(v, mask1) -- required by spec?
   local mask = bnot(lshift(mask1, field))
   return band(n, mask) + lshift(v, field)
 end
-M.replace = replace
 
-local function bswap(x)  -- BitOp style
+function M.bswap(x)  -- BitOp style
   local a = band(x, 0xff); x = rshift(x, 8)
   local b = band(x, 0xff); x = rshift(x, 8)
   local c = band(x, 0xff); x = rshift(x, 8)
   local d = band(x, 0xff)
   return lshift(lshift(lshift(a, 8) + b, 8) + c, 8) + d
 end
-M.bswap = bswap
 
-local function rrotate(x, disp)  -- Lua5.2 style
+function M.rrotate(x, disp)  -- Lua5.2 style
   disp = disp % 32
   local low = band(x, 2^disp-1)
   return rshift(x, disp) + lshift(low, 32-disp)
 end
-M.rrotate = rrotate
+local rrotate = M.rrotate
 
-local function lrotate(x, disp)  -- Lua5.2 style
+function M.lrotate(x, disp)  -- Lua5.2 style
   return rrotate(x, -disp)
 end
-M.lrotate = lrotate
 
 M.rol = M.lrotate  -- LuaOp style
 M.ror = M.rrotate  -- LuaOp style
