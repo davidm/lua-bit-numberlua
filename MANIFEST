@@ -2,7 +2,7 @@ COPYRIGHT
 CHANGES.txt
 README.txt
 MANIFEST
-lua-bit-numberlua.rockspec
+rockspec.in
 dist.info
 test.lua
 util.mk

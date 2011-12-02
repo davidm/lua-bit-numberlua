@@ -3,7 +3,7 @@ version = "$(_VERSION)"
 source = {
    --url = "https://github.com/davidm/lua-bit-numberlua/zipball/v$(_VERSION)",
    url = "git://github.com/davidm/lua-bit-numberlua.git",
-   tag='v$(_VERSION)'
+   branch='v$(_VERSION)'
 }
 description = {
    summary    = "Bitwise operators in pure Lua using Lua numbers",
@@ -15,6 +15,7 @@ description = {
    maintainer = "David Manura <http://lua-users.org/wiki/DavidManura>",
 }
 dependencies = {
+  "lua >= 5.1"  -- including 5.2
 }
 build = {
   type = "none",
@@ -24,3 +25,4 @@ build = {
      }
   }
 }
+-- _VERSION from lmod/bit/numberlua.lua

@@ -162,9 +162,19 @@ DEPENDENCIES
 
   None (other than Lua 5.1 or 5.2).
     
-INSTALLATION
+DOWNLOAD/INSTALLATION
 
-  Copy the `bit` directory into your LUA_PATH.
+  If using LuaRocks:
+    luarocks install lua-bit-numberlua
+
+  Otherwise, download <https://github.com/davidm/lua-bit-numberlua/zipball/master>.
+  Alternately, if using git:
+    git clone git://github.com/davidm/lua-bit-numberlua.git
+    cd lua-bit-numberlua
+  Optionally unpack:
+    ./util.mk
+  or unpack and install in LuaRocks:
+    ./util.mk install 
 
 REFERENCES
 
@@ -197,7 +207,7 @@ LICENSE
 
 --]]
 
-local M = {_TYPE='module', _NAME='bit.numberlua', _VERSION='000.003.2011-11-29'}
+local M = {_TYPE='module', _NAME='bit.numberlua', _VERSION='0.3.20111129'}
 
 local floor = math.floor
 
