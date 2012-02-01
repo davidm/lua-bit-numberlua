@@ -207,7 +207,7 @@ LICENSE
 
 --]]
 
-local M = {_TYPE='module', _NAME='bit.numberlua', _VERSION='0.3.20111129'}
+local M = {_TYPE='module', _NAME='bit.numberlua', _VERSION='0.3.1.20120131'}
 
 local floor = math.floor
 
@@ -364,7 +364,7 @@ local function bit32_bxor(a, b, c, ...)
     b = b % MOD
     z = bxor(a, b)
     if c then
-      z = bxor(z, c, ...)
+      z = bit32_bxor(z, c, ...)
     end
     return z
   elseif a then
@@ -382,7 +382,7 @@ local function bit32_band(a, b, c, ...)
     b = b % MOD
     z = ((a+b) - bxor(a,b)) / 2
     if c then
-      z = band(z, c, ...)
+      z = bit32_band(z, c, ...)
     end
     return z
   elseif a then
@@ -400,7 +400,7 @@ local function bit32_bor(a, b, c, ...)
     b = b % MOD
     z = MODM - band(MODM - a, MODM - b)
     if c then
-      z = bor(z, c, ...)
+      z = bit32_bor(z, c, ...)
     end
     return z
   elseif a then
@@ -468,9 +468,9 @@ end
 -- Start LuaBitOp "bit" compat section.
 --
 
- M.bit = {} -- LuaBitOp "bit" compatibility
+M.bit = {} -- LuaBitOp "bit" compatibility
 
- function M.bit.tobit(x)
+function M.bit.tobit(x)
   x = x % MOD
   if x >= 0x80000000 then x = x - MOD end
   return x
