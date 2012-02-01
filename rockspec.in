@@ -1,9 +1,9 @@
 package = "lua-bit-numberlua"
-version = "$(_VERSION)"
+version = "$(_VERSION)-$(ROCKVERSION)"
 source = {
    --url = "https://github.com/davidm/lua-bit-numberlua/zipball/v$(_VERSION)",
    url = "git://github.com/davidm/lua-bit-numberlua.git",
-   branch='v$(_VERSION)'
+   tag='v$(_VERSION)-$(ROCKVERSION)'
 }
 description = {
    summary    = "Bitwise operators in pure Lua using Lua numbers",
@@ -25,4 +25,6 @@ build = {
      }
   }
 }
--- _VERSION from lmod/bit/numberlua.lua
+-- VERSIONFROM="lmod/bit/numberlua.lua"
+-- ROCKVERSION="1"
+-- ROCKSCMVERSION="1"
