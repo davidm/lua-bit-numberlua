@@ -8,7 +8,7 @@ LUA MODULE
 SYNOPSIS
 
   local bit = require 'bit.numberlua'
-  print(bit.band(0xff00ff00, 0x00ff00ff)) --> 0xffffffff
+  print(bit.bor(0xff00ff00, 0x00ff00ff)) --> 0xffffffff
   
   -- Interface providing strong Lua 5.2 'bit32' compatibility
   local bit32 = require 'bit.numberlua'.bit32
